@@ -12,12 +12,16 @@ app.use(express.static('public'));
 app.post('/api/typst-render', async (req, res) => {
     try {
         const { code } = req.body;
+        console.log('Received code:', code);
+        
         if (!code) {
-            return res.status(400).json({ error: 'No code provided' });
+            console.log('No code provided');
+            return res.status(400).send('No code provided');
         }
         
         // Create proper HTML structure for Typst code
         const wrappedCode = `<pre><code class="language-math">\n${code}\n</code></pre>`;
+        console.log('Wrapped code:', wrappedCode);
         
         // Process using rehype and typst
         const file = await unified()
@@ -26,12 +30,22 @@ app.post('/api/typst-render', async (req, res) => {
             .use(rehypeStringify)
             .process(wrappedCode);
             
-        res.json({ html: String(file) });
+        const result = String(file);
+        console.log('Rendered result:', result);
+        
+        if (!result || result.trim() === '') {
+            console.log('Empty rendering result');
+            throw new Error('Empty rendering result');
+        }
+        
+        res.send(result);
     } catch (error) {
         console.error('Render error:', error);
+        console.error('Error stack:', error.stack);
         res.status(500).json({
             error: 'Error rendering Typst code',
-            details: error.message
+            message: error.message,
+            stack: error.stack
         });
     }
 });

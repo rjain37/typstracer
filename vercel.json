@@ -3,7 +3,10 @@
     "builds": [
         {
             "src": "server.js",
-            "use": "@vercel/node"
+            "use": "@vercel/node",
+            "config": {
+                "includeFiles": ["rehypeTypst.js"]
+            }
         },
         {
             "src": "public/**",
@@ -19,5 +22,8 @@
             "src": "/(.*)",
             "dest": "/public/$1"
         }
-    ]
+    ],
+    "env": {
+        "NODE_ENV": "production"
+    }
 }
