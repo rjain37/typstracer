@@ -49,5 +49,11 @@ const problems = [
         "title": "Bayes' Theorem",
         "description": "Fundamental in probability",
         "typst": "P(A|B) = (P(B|A)P(A))/P(B)"
+    },
+    // Model Theory Problems
+    {
+        "title": "Elementary Embedding",
+        "description": "Definition of elementary embedding",
+        "typst": "cal(M) prec cal(N) iff forall phi forall a (cal(M) models phi[a] <=> cal(N) models phi[j(a)])"
     }
 ];
