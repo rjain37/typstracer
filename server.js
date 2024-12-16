@@ -12,6 +12,9 @@ app.use(express.static('public'));
 app.post('/api/typst-render', async (req, res) => {
     try {
         const { code } = req.body;
+        if (!code) {
+            return res.status(400).json({ error: 'No code provided' });
+        }
         
         // Create proper HTML structure for Typst code
         const wrappedCode = `<pre><code class="language-math">\n${code}\n</code></pre>`;
@@ -23,10 +26,13 @@ app.post('/api/typst-render', async (req, res) => {
             .use(rehypeStringify)
             .process(wrappedCode);
             
-        res.send(String(file));
+        res.json({ html: String(file) });
     } catch (error) {
         console.error('Render error:', error);
-        res.status(500).send('Error rendering Typst code');
+        res.status(500).json({
+            error: 'Error rendering Typst code',
+            details: error.message
+        });
     }
 });
 

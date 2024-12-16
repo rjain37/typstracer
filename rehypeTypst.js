@@ -144,62 +144,38 @@ export default function rehypeTypst(options) {
  */
 let compilerIns;
 
+async function initCompiler() {
+  if (!compilerIns) {
+    try {
+      compilerIns = await NodeCompiler.new();
+      await compilerIns.compile(""); // Test compilation
+    } catch (error) {
+      console.error('Error initializing Typst compiler:', error);
+      throw new Error('Failed to initialize Typst compiler');
+    }
+  }
+  return compilerIns;
+}
+
 async function renderToSVGString(code, displayMode) {
-  const $typst = (compilerIns ||= NodeCompiler.create());
-  const res = renderToSVGString_($typst, code, displayMode);
-  $typst.evictCache(10);
-  return res;
-}
-
-/**
- *
- * @param {NodeCompiler} $typst
- * @returns
- */
-async function renderToSVGString_($typst, code, displayMode) {
-  const inlineMathTemplate = `
-#set page(height: auto, width: auto, margin: 0pt)
-
-#let s = state("t", (:))
-
-#let pin(t) = context {
-  let width = measure(line(length: here().position().y)).width
-  s.update(it => it.insert(t, width) + it)
-}
-
-#show math.equation: it => {
-  box(it, inset: (top: 0.5em, bottom: 0.5em))
-}
-
-$pin("l1")${code}$
-
-#context [
-  #metadata(s.final().at("l1")) <label>
-]
-`;
-  const displayMathTemplate = `
-#set page(height: auto, width: auto, margin: 0pt)
-
-$ ${code} $
-`;
-  const mainFileContent = displayMode ? displayMathTemplate : inlineMathTemplate;
-  const docRes = $typst.compile({ mainFileContent });
-  if (!docRes.result) {
-    const diags = $typst.fetchDiagnostics(docRes.takeDiagnostics());
-    console.error(diags);
-    return {};
+  try {
+    const compiler = await initCompiler();
+    return await renderToSVGString_(compiler, code, displayMode);
+  } catch (error) {
+    console.error('Error rendering Typst:', error);
+    throw error;
   }
-  const doc = docRes.result;
+}
 
-  const svg = $typst.svg(doc);
-  const res = {
-    svg,
-  };
-  if (!displayMode) {
-    const query = $typst.query(doc, { selector: '<label>' });
-    // parse baselinePosition from query ignore last 2 chars
-    res.baselinePosition = parseFloat(query[0].value.slice(0, -2));
+async function renderToSVGString_(compiler, code, displayMode) {
+  try {
+    const svg = await compiler.compile2svg(code);
+    if (!svg) {
+      throw new Error('Failed to compile Typst to SVG');
+    }
+    return svg;
+  } catch (error) {
+    console.error('Error in Typst compilation:', error);
+    throw error;
   }
-
-  return res;
 }
