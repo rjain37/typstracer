@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Typstracer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        #landing-page, #game-container, #ending-screen {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #game-container, #ending-screen {
+            display: none;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        .game-description {
+            margin: 40px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        .game-description h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .game-description ul {
+            padding-left: 20px;
+        }
+        .game-description li {
+            margin: 10px 0;
+            color: #34495e;
+        }
+        .start-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .stats {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .stats h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .stat-item {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #34495e;
+        }
+        .final-score {
+            font-size: 2em;
+            color: #5da2bf;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5da2bf;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #4b8299;
+        }
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .score, .timer {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        #editor {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-size: 16px;
+            line-height: 1.4;
+            resize: vertical;
+        }
+        #editor::placeholder {
+            color: #888;
+        }
+        .preview-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .preview-box {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            min-height: 25px;
+        }
+        .preview-box.target {
+            background-color: #f8f9fa;
+        }
+        .preview-box.error {
+            border-color: #ff4444;
+        }
+        .label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="landing-page">
+        <div class="header">
+            <h1>Welcome to Typstracer!</h1>
+            <p>Master Typst typesetting through interactive challenges</p>
+        </div>
+
+        <div class="game-description">
+            <h2>How to Play</h2>
+            <ul>
+                <li>You'll be shown a typeset formula or text that you need to recreate using Typst syntax</li>
+                <li>Type your Typst code in the editor to see it render in real-time</li>
+                <li>When your output matches the target exactly, you'll earn points and move to the next challenge</li>
+                <li>Skip challenging problems or end the game at any time</li>
+            </ul>
+
+            <h2>Tips</h2>
+            <ul>
+                <li>The border will turn red if your syntax has an error</li>
+                <li>Take your time - there's no penalty for mistakes!</li>
+            </ul>
+        </div>
+
+        <div class="start-buttons">
+            <button id="start-timed">Start Timed Game</button>
+            <button id="start-practice">Start Practice Mode</button>
+        </div>
+    </div>
+    
+    <div id="game-container">
+        <div class="header">
+            <h1>Typstracer</h1>
+            <p>Practice your Typst skills by recreating the formulas!</p>
+        </div>
+
+        <div class="game-controls">
+            <div>
+                <button id="skip-button">Skip Problem</button>
+                <button id="end-game-button">End Game</button>
+            </div>
+            <div class="score">Score: <span id="score">0</span></div>
+            <div id="timer-container" style="display: none;">
+                <div class="timer">Time: <span id="timer">0:00</span></div>
+            </div>
+        </div>
+
+        <div class="problem-info">
+            <h2 id="problem-title">Loading...</h2>
+            <p id="problem-description"></p>
+        </div>
+
+        <div class="label">Target:</div>
+        <div class="preview-box target" id="target"></div>
+
+        <div class="label">Your Output:</div>
+        <div class="preview-box" id="preview"></div>
+        
+        <div class="label">Your Input:</div>
+        <textarea id="editor" placeholder="Enter your Typst code here..."></textarea>
+    </div>
+
+    <div id="ending-screen">
+        <div class="header">
+            <h1>Game Complete!</h1>
+            <p>Great job mastering Typst!</p>
+        </div>
+        
+        <div class="stats">
+            <h2>Your Results</h2>
+            <div class="final-score">
+                Final Score: <span id="final-score">0</span>
+            </div>
+            <div class="stat-item">
+                Problems Solved: <span id="problems-solved">0</span>
+            </div>
+            <div class="stat-item">
+                Time Played: <span id="time-played">0:00</span>
+            </div>
+        </div>
+
+        <div class="start-buttons">
+            <button onclick="startGame(false)">Play Again (Practice)</button>
+            <button onclick="startGame(true)">Play Again (Timed)</button>
+        </div>
+    </div>
+
+    <script src="assets/js/typst-problems.js"></script>
+    <script>
+        let currentProblem = null;
+        let timeLeft;
+        let timer;
+        let score = 0;
+        let timerInterval = null;
+        let isTimedMode = false;
+        let lastValidHtml = '';
+        let usedProblemIndices = new Set();  // Track used problem indices
+
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+        const solution = document.getElementById('solution');
+        const problemTitle = document.getElementById('problem-title');
+        const problemDescription = document.getElementById('problem-description');
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const timerContainer = document.getElementById('timer-container');
+        const landingPage = document.getElementById('landing-page');
+        const gameContainer = document.getElementById('game-container');
+        const endingScreen = document.getElementById('ending-screen');  // Add reference to ending screen
+
+        function startGame(timed) {
+            isTimedMode = timed;
+            score = 0;
+            scoreElement.textContent = score;
+            startTime = Date.now();
+            usedProblemIndices.clear();  // Clear used problems when starting new game
+            
+            if (timed) {
+                timerContainer.style.display = 'block';
+                timeLeft = 300;
+                updateTimer();
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+            }
+            
+            landingPage.style.display = 'none';
+            endingScreen.style.display = 'none';  // Hide ending screen
+            gameContainer.style.display = 'block';
+            loadNextProblem();
+        }
+
+        function updateTimer() {
+            if (!startTime || !isTimedMode) return;
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function loadNextProblem() {
+            // Filter out used problems
+            const availableIndices = Array.from(Array(problems.length).keys())
+                .filter(i => !usedProblemIndices.has(i));
+            
+            // If all problems have been used, end the game
+            if (availableIndices.length === 0) {
+                endGame();
+                return;
+            }
+            
+            // Randomly select from remaining problems
+            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+            usedProblemIndices.add(randomIndex);
+            currentProblem = problems[randomIndex];
+            
+            problemTitle.textContent = currentProblem.title;
+            problemDescription.textContent = currentProblem.description;
+            editor.value = '';
+            preview.innerHTML = ''; // Clear the preview
+            renderTypst(currentProblem.typst, target);
+        }
+
+        async function renderTypst(code, element) {
+            try {
+                const response = await fetch('/api/typst-render', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code })
+                });
+                
+                if (response.ok) {
+                    const html = await response.text();
+                    element.innerHTML = html;
+                    if (element === preview) {
+                        element.classList.remove('error');
+                        const normalizedPreview = preview.innerHTML.replace(/\s+/g, ' ').trim();
+                        const normalizedTarget = target.innerHTML.replace(/\s+/g, ' ').trim();
+                        if (normalizedPreview === normalizedTarget) {
+                            // Calculate score based on problem length
+                            const points = Math.ceil(currentProblem.typst.length / 10);
+                            score += points;
+                            scoreElement.textContent = score;
+                            loadNextProblem();
+                        }
+                    }
+                } else {
+                    if (element === preview) {
+                        element.classList.add('error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error rendering Typst:', error);
+                if (element === preview) {
+                    element.classList.add('error');
+                }
+            }
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            
+            // Calculate stats
+            const endTime = Date.now();
+            const totalTime = Math.floor((endTime - startTime) / 1000); // in seconds
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update ending screen
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('problems-solved').textContent = usedProblemIndices.size;
+            document.getElementById('time-played').textContent = timeString;
+            
+            // Show ending screen
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('ending-screen').style.display = 'block';
+        }
+
+        // Event Listeners
+        editor.addEventListener('input', () => {
+            renderTypst(editor.value, preview);
+        });
+
+        document.getElementById('start-timed').addEventListener('click', () => startGame(true));
+        document.getElementById('start-practice').addEventListener('click', () => startGame(false));
+        document.getElementById('skip-button').addEventListener('click', loadNextProblem);
+        document.getElementById('end-game-button').addEventListener('click', endGame);
+    </script>
+</body>
+</html>
