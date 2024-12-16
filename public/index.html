@@ -290,14 +290,17 @@
         }
 
         function loadNextProblem() {
-            // Filter out used problems
-            const availableIndices = Array.from(Array(problems.length).keys())
-                .filter(i => !usedProblemIndices.has(i));
-            
-            // If all problems have been used, end the game
-            if (availableIndices.length === 0) {
+            if (usedProblemIndices.size >= problems.length) {
                 endGame();
                 return;
+            }
+            
+            // Get available problem indices
+            const availableIndices = [];
+            for (let i = 0; i < problems.length; i++) {
+                if (!usedProblemIndices.has(i)) {
+                    availableIndices.push(i);
+                }
             }
             
             // Randomly select from remaining problems
@@ -305,7 +308,9 @@
             usedProblemIndices.add(randomIndex);
             currentProblem = problems[randomIndex];
             
-            problemTitle.textContent = currentProblem.title;
+            // Display title with points
+            const points = currentProblem.points();
+            problemTitle.textContent = `${currentProblem.title} (${points} pts)`;
             problemDescription.textContent = currentProblem.description;
             editor.value = '';
             preview.innerHTML = ''; // Clear the preview
