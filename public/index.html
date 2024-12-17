@@ -225,24 +225,23 @@
             <div class="stat-item">
                 Problems Solved: <span id="problems-solved">0</span>
             </div>
-            <div class="stat-item">
+            <div id="time-played-container" class="stat-item" style="display: none;">
                 Time Played: <span id="time-played">0:00</span>
             </div>
         </div>
 
         <div class="start-buttons">
-            <button onclick="startGame(false)">Play Again (Practice)</button>
             <button onclick="startGame(true)">Play Again (Timed)</button>
+            <button onclick="startGame(false)">Play Again (Practice)</button>
         </div>
     </div>
 
     <script src="assets/js/typst-problems.js"></script>
     <script>
         let currentProblem = null;
+        let timerInterval;
         let timeLeft;
-        let timer;
-        let score = 0;
-        let timerInterval = null;
+        const GAME_DURATION = 180; // 3 minutes in seconds
         let isTimedMode = false;
         let lastValidHtml = '';
         let usedProblemIndices = new Set();  // Track used problem indices
@@ -258,20 +257,39 @@
         const landingPage = document.getElementById('landing-page');
         const gameContainer = document.getElementById('game-container');
         const endingScreen = document.getElementById('ending-screen');  // Add reference to ending screen
+        const finalScoreElement = document.getElementById('final-score'); // Add reference to final score element
 
         function startGame(timed) {
             isTimedMode = timed;
             score = 0;
             scoreElement.textContent = score;
-            startTime = Date.now();
             usedProblemIndices.clear();  // Clear used problems when starting new game
             
+            // Reset timer and timer display
             if (timed) {
                 timerContainer.style.display = 'block';
-                timeLeft = 300;
+                timeLeft = GAME_DURATION;
                 updateTimer();
                 if (timerInterval) {
                     clearInterval(timerInterval);
+                }
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimer();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        endGame();
+                    }
+                }, 1000);
+            } else {
+                timerContainer.style.display = 'none';
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+                // Hide time played in end screen for practice mode
+                const timePlayedContainer = document.getElementById('time-played-container');
+                if (timePlayedContainer) {
+                    timePlayedContainer.style.display = 'none';
                 }
             }
             
@@ -282,10 +300,9 @@
         }
 
         function updateTimer() {
-            if (!startTime || !isTimedMode) return;
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            const minutes = Math.floor(elapsed / 60);
-            const seconds = elapsed % 60;
+            if (!isTimedMode) return;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
             timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
 
@@ -356,23 +373,23 @@
         }
 
         function endGame() {
-            clearInterval(timerInterval);
+            clearInterval(timerInterval); // Clear timer interval
+            gameContainer.style.display = 'none';
+            endingScreen.style.display = 'block';
+            finalScoreElement.textContent = score;
             
-            // Calculate stats
-            const endTime = Date.now();
-            const totalTime = Math.floor((endTime - startTime) / 1000); // in seconds
-            const minutes = Math.floor(totalTime / 60);
-            const seconds = totalTime % 60;
-            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            
-            // Update ending screen
-            document.getElementById('final-score').textContent = score;
+            const timePlayedContainer = document.getElementById('time-played-container');
+            if (isTimedMode) {
+                const timePlayedElement = document.getElementById('time-played');
+                const timeSpent = GAME_DURATION - timeLeft;
+                const minutes = Math.floor(timeSpent / 60);
+                const seconds = timeSpent % 60;
+                timePlayedElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                timePlayedContainer.style.display = 'block';
+            } else {
+                timePlayedContainer.style.display = 'none';
+            }
             document.getElementById('problems-solved').textContent = usedProblemIndices.size;
-            document.getElementById('time-played').textContent = timeString;
-            
-            // Show ending screen
-            document.getElementById('game-container').style.display = 'none';
-            document.getElementById('ending-screen').style.display = 'block';
         }
 
         // Event Listeners
