@@ -3,6 +3,7 @@ import rehypeTypst from './rehypeTypst.js';
 import rehypeParse from 'rehype-parse';
 import rehypeStringify from 'rehype-stringify';
 import {unified} from 'unified';
+import { Analytics } from "@vercel/analytics/react"
 
 const app = express();
 app.use(express.json());
