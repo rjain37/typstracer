@@ -1,0 +1,36 @@
+name: New Problem
+description: Submit a new problem for Typstracer
+title: "New Problem: "
+labels: ["new-problem"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for submitting a new problem for Typstracer! Please fill out the details below.
+  
+  - type: input
+    id: title
+    attributes:
+      label: Problem Title
+      description: A short, descriptive title for the problem
+      placeholder: "e.g., Fourier Transform"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description
+      description: A brief description of what this formula/equation represents
+      placeholder: "e.g., The continuous Fourier transform of a function"
+    validations:
+      required: true
+
+  - type: textarea
+    id: typst
+    attributes:
+      label: Typst Code
+      description: The Typst code that renders the formula/equation
+      placeholder: "e.g., F(omega) = integral_(-infinity)^(infinity) f(t) e^(-i omega t) dt"
+    validations:
+      required: true

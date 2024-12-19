@@ -1,0 +1,115 @@
+name: Add New Problem
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  add-problem:
+    if: github.event.label.name == 'approved'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Extract Problem Details
+        id: extract
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body;
+            
+            // Parse the issue body to extract fields
+            const getField = (field) => {
+              const regex = new RegExp(`### ${field}\\s*([\\s\\S]*?)(?=###|$)`);
+              const match = body.match(regex);
+              return match ? match[1].trim() : '';
+            };
+            
+            const title = getField('Problem Title');
+            const description = getField('Problem Description');
+            const typst = getField('Typst Code');
+            
+            core.setOutput('title', title);
+            core.setOutput('description', description);
+            core.setOutput('typst', typst);
+
+      - name: Add Problem to File
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'public/assets/js/typst-problems.js';
+            
+            // Read the current file
+            let content = fs.readFileSync(path, 'utf8');
+            
+            // Parse the problems array
+            const problemsMatch = content.match(/const problems = \[([\s\S]*?)\];/);
+            if (!problemsMatch) {
+              throw new Error('Could not find problems array in file');
+            }
+            
+            // Create new problem object
+            const newProblem = {
+              title: process.env.TITLE,
+              description: process.env.DESCRIPTION,
+              typst: process.env.TYPST
+            };
+            
+            // Convert to string format
+            const problemString = `    {
+                "title": "${newProblem.title}",
+                "description": "${newProblem.description}",
+                "typst": "${newProblem.typst}"
+            }`;
+            
+            // Add to existing problems
+            const problems = problemsMatch[1];
+            const newContent = content.replace(
+              problems,
+              `${problems},\n${problemString}`
+            );
+            
+            // Write back to file
+            fs.writeFileSync(path, newContent);
+        env:
+          TITLE: ${{ steps.extract.outputs.title }}
+          DESCRIPTION: ${{ steps.extract.outputs.description }}
+          TYPST: ${{ steps.extract.outputs.typst }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Add new problem: ${{ steps.extract.outputs.title }}"
+          title: "Add new problem: ${{ steps.extract.outputs.title }}"
+          body: |
+            Adds new problem from issue #${{ github.event.issue.number }}
+            
+            - Title: ${{ steps.extract.outputs.title }}
+            - Description: ${{ steps.extract.outputs.description }}
+            
+            Closes #${{ github.event.issue.number }}
+          branch: add-problem-${{ github.event.issue.number }}
+          base: main
+          delete-branch: true
+
+      - name: Close Issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Problem has been added and a pull request has been created. Thank you for your contribution!'
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
