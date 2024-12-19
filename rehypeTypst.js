@@ -186,7 +186,7 @@ $ ${code} $
   const docRes = $typst.compile({ mainFileContent });
   if (!docRes.result) {
     const diags = $typst.fetchDiagnostics(docRes.takeDiagnostics());
-    console.error(diags);
+    // console.error(diags);
     return {};
   }
   const doc = docRes.result;

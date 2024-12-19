@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Typstracer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/image/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="assets/image/favicon.ico">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -199,6 +201,7 @@
         <div class="problem-info">
             <h2 id="problem-title">Loading...</h2>
             <p id="problem-description"></p>
+            <p id="problem-points"></p>
         </div>
 
         <div class="label">Target:</div>
@@ -240,24 +243,30 @@
     <script>
         let currentProblem = null;
         let timerInterval;
-        let timeLeft;
-        const GAME_DURATION = 180; // 3 minutes in seconds
+        let timeLeft = 180; // 3 minutes in seconds
         let isTimedMode = false;
-        let lastValidHtml = '';
+        let score = 0;
+        const GAME_DURATION = 180; // 3 minutes in seconds
         let usedProblemIndices = new Set();  // Track used problem indices
 
+        // DOM element references
         const editor = document.getElementById('editor');
         const preview = document.getElementById('preview');
-        const solution = document.getElementById('solution');
         const problemTitle = document.getElementById('problem-title');
         const problemDescription = document.getElementById('problem-description');
+        const problemPoints = document.getElementById('problem-points');
         const scoreElement = document.getElementById('score');
         const timerElement = document.getElementById('timer');
         const timerContainer = document.getElementById('timer-container');
         const landingPage = document.getElementById('landing-page');
         const gameContainer = document.getElementById('game-container');
-        const endingScreen = document.getElementById('ending-screen');  // Add reference to ending screen
-        const finalScoreElement = document.getElementById('final-score'); // Add reference to final score element
+        const endingScreen = document.getElementById('ending-screen');
+        const finalScoreElement = document.getElementById('final-score');
+
+        // Global function to calculate points for any problem
+        function calculatePoints(typstCode) {
+            return Math.ceil(typstCode.length / 10);
+        }
 
         function startGame(timed) {
             isTimedMode = timed;
@@ -326,7 +335,7 @@
             currentProblem = problems[randomIndex];
             
             // Display title with points
-            const points = currentProblem.points();
+            const points = calculatePoints(currentProblem.typst);
             problemTitle.textContent = `${currentProblem.title} (${points} pts)`;
             problemDescription.textContent = currentProblem.description;
             editor.value = '';
@@ -352,9 +361,8 @@
                         const normalizedPreview = preview.innerHTML.replace(/\s+/g, ' ').trim();
                         const normalizedTarget = target.innerHTML.replace(/\s+/g, ' ').trim();
                         if (normalizedPreview === normalizedTarget) {
-                            // Calculate score based on problem length
-                            const points = Math.ceil(currentProblem.typst.length / 10);
-                            score += points;
+                            // Add points to score
+                            score += calculatePoints(currentProblem.typst);
                             scoreElement.textContent = score;
                             loadNextProblem();
                         }
