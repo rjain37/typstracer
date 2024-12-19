@@ -248,6 +248,8 @@
         let score = 0;
         const GAME_DURATION = 180; // 3 minutes in seconds
         let usedProblemIndices = new Set();  // Track used problem indices
+        let preloadedProblem = null;
+        let preloadedTarget = null;
 
         // DOM element references
         const editor = document.getElementById('editor');
@@ -262,19 +264,43 @@
         const gameContainer = document.getElementById('game-container');
         const endingScreen = document.getElementById('ending-screen');
         const finalScoreElement = document.getElementById('final-score');
+        const target = document.getElementById('target');
 
         // Global function to calculate points for any problem
         function calculatePoints(typstCode) {
             return Math.ceil(typstCode.length / 10);
         }
 
+        function updateTimer() {
+            if (!isTimedMode) return;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Preload the first problem
+        async function preloadFirstProblem() {
+            const randomIndex = Math.floor(Math.random() * problems.length);
+            preloadedProblem = problems[randomIndex];
+            
+            // Create a hidden div for preloading
+            preloadedTarget = document.createElement('div');
+            preloadedTarget.style.display = 'none';
+            document.body.appendChild(preloadedTarget);
+            
+            // Pre-render the problem
+            await renderTypst(preloadedProblem.typst, preloadedTarget);
+        }
+
+        // Start preloading when the page loads
+        window.addEventListener('load', preloadFirstProblem);
+
         function startGame(timed) {
             isTimedMode = timed;
             score = 0;
             scoreElement.textContent = score;
-            usedProblemIndices.clear();  // Clear used problems when starting new game
-            
-            // Reset timer and timer display
+            usedProblemIndices.clear();
+
             if (timed) {
                 timerContainer.style.display = 'block';
                 timeLeft = GAME_DURATION;
@@ -295,46 +321,72 @@
                 if (timerInterval) {
                     clearInterval(timerInterval);
                 }
-                // Hide time played in end screen for practice mode
-                const timePlayedContainer = document.getElementById('time-played-container');
-                if (timePlayedContainer) {
-                    timePlayedContainer.style.display = 'none';
-                }
             }
-            
-            landingPage.style.display = 'none';
-            endingScreen.style.display = 'none';  // Hide ending screen
-            gameContainer.style.display = 'block';
-            loadNextProblem();
-        }
 
-        function updateTimer() {
-            if (!isTimedMode) return;
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            landingPage.style.display = 'none';
+            endingScreen.style.display = 'none';
+            gameContainer.style.display = 'block';
+
+            // Use preloaded problem if available
+            if (preloadedProblem && preloadedTarget) {
+                currentProblem = preloadedProblem;
+                usedProblemIndices.add(problems.indexOf(currentProblem));
+                
+                const points = calculatePoints(currentProblem.typst);
+                problemTitle.textContent = `${currentProblem.title} (${points} pts)`;
+                problemDescription.textContent = currentProblem.description;
+                editor.value = '';
+                preview.innerHTML = ''; // Clear the preview
+                target.innerHTML = preloadedTarget.innerHTML;
+                
+                // Clean up preloaded elements
+                preloadedTarget.remove();
+                preloadedProblem = null;
+                preloadedTarget = null;
+                
+                // Start preloading the next problem
+                preloadFirstProblem();
+            } else {
+                loadNextProblem();
+            }
         }
 
         function loadNextProblem() {
-            if (usedProblemIndices.size >= problems.length) {
+            // Use preloaded problem if available
+            if (preloadedProblem && preloadedTarget) {
+                currentProblem = preloadedProblem;
+                usedProblemIndices.add(problems.indexOf(currentProblem));
+                
+                const points = calculatePoints(currentProblem.typst);
+                problemTitle.textContent = `${currentProblem.title} (${points} pts)`;
+                problemDescription.textContent = currentProblem.description;
+                editor.value = '';
+                preview.innerHTML = ''; // Clear the preview
+                target.innerHTML = preloadedTarget.innerHTML;
+                
+                // Clean up preloaded elements
+                preloadedTarget.remove();
+                preloadedProblem = null;
+                preloadedTarget = null;
+                
+                // Start preloading the next problem
+                preloadFirstProblem();
+                return;
+            }
+
+            // Filter out used problems
+            const availableProblems = problems.filter(p => !usedProblemIndices.has(problems.indexOf(p)));
+            if (availableProblems.length === 0) {
                 endGame();
                 return;
             }
-            
-            // Get available problem indices
-            const availableIndices = [];
-            for (let i = 0; i < problems.length; i++) {
-                if (!usedProblemIndices.has(i)) {
-                    availableIndices.push(i);
-                }
-            }
-            
-            // Randomly select from remaining problems
-            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-            usedProblemIndices.add(randomIndex);
-            currentProblem = problems[randomIndex];
-            
-            // Display title with points
+
+            // Randomly select a problem
+            const randomIndex = Math.floor(Math.random() * availableProblems.length);
+            currentProblem = availableProblems[randomIndex];
+            usedProblemIndices.add(problems.indexOf(currentProblem));
+
+            // Update display
             const points = calculatePoints(currentProblem.typst);
             problemTitle.textContent = `${currentProblem.title} (${points} pts)`;
             problemDescription.textContent = currentProblem.description;
