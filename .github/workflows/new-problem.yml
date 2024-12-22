@@ -6,7 +6,6 @@ on:
 permissions:
   contents: write
   issues: write
-  pull-requests: write
 
 jobs:
   add-problem:
@@ -88,21 +87,13 @@ jobs:
           DESCRIPTION: ${{ steps.extract.outputs.description }}
           TYPST: ${{ steps.extract.outputs.typst }}
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: "Add new problem: ${{ steps.extract.outputs.title }}"
-          title: "Add new problem: ${{ steps.extract.outputs.title }}"
-          body: |
-            Adds new problem from issue #${{ github.event.issue.number }}
-            
-            - Title: ${{ steps.extract.outputs.title }}
-            - Description: ${{ steps.extract.outputs.description }}
-            
-            Closes #${{ github.event.issue.number }}
-          branch: add-problem-${{ github.event.issue.number }}
-          base: main
-          delete-branch: true
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/assets/js/typst-problems.js
+          git commit -m "Add new problem: ${{ steps.extract.outputs.title }}"
+          git push
 
       - name: Close Issue
         uses: actions/github-script@v6
@@ -112,7 +103,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Problem has been added and a pull request has been created. Thank you for your contribution!'
+              body: 'Problem has been added successfully. Thank you for your contribution!'
             });
             await github.rest.issues.update({
               owner: context.repo.owner,
