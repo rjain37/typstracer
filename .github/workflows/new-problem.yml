@@ -74,7 +74,6 @@ jobs:
     }`;
             
             // Add to existing problems
-            const problems = problemsMatch[1];
             const newContent = content.replace(
               /(\s*)\];/,
               `${problemString}\n];`
