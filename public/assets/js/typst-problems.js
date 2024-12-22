@@ -83,7 +83,7 @@ const problems = [
     {
         "title": "Fubini's Theorem",
         "description": "Swapping integrals",
-        "typst": "integral_X ( integral_Y f(x,y) dif y) dif x = integral_Y ( integral_X f(x,y) dif x) dif y = integral_(X times Y) f(x,y) dif (x,y)" 
+        "typst": "integral_X ( integral_Y f(x,y) dif y) dif x = integral_Y ( integral_X f(x,y) dif x) dif y = integral_(X times Y) f(x,y) dif (x,y)"
     },
     {
         "title": "Black Scholes",
@@ -99,10 +99,10 @@ const problems = [
         "title": "Handshake Lemma",
         "description": "I bet you're fun at parties",
         "typst": "sum_(v in V) deg(v) = 2|E|"
-    }
-,
+    },
     {
-    "title": "Analytic Radius of Convergence",
-    "description": "The radius for where a power series converges in normed vector spaces",
-    "typst": "R(f) = ( limsup_(n -> infinity) || T_n ||^(1 slash n)_(cal(L)^n))^(-1)"
-}];
+        "title": "Analytic Radius of Convergence",
+        "description": "The radius for where a power series converges in normed vector spaces",
+        "typst": "R(f) = ( limsup_(n -> infinity) || T_n ||^(1 slash n)_(cal(L)^n))^(-1)"
+    }
+];
