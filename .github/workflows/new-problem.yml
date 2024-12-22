@@ -66,18 +66,18 @@ jobs:
               typst: process.env.TYPST
             };
             
-            // Convert to string format
-            const problemString = `    {
-                "title": "${newProblem.title}",
-                "description": "${newProblem.description}",
-                "typst": "${newProblem.typst}"
-            }`;
+            // Convert to string format with proper indentation
+            const problemString = `,\n    {
+        "title": "${newProblem.title}",
+        "description": "${newProblem.description}",
+        "typst": "${newProblem.typst}"
+    }`;
             
             // Add to existing problems
             const problems = problemsMatch[1];
             const newContent = content.replace(
-              problems,
-              `${problems},\n${problemString}`
+              /(\s*)\];/,
+              `${problemString}\n];`
             );
             
             // Write back to file
