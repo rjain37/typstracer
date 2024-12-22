@@ -66,17 +66,20 @@ jobs:
               typst: process.env.TYPST
             };
             
-            // Convert to string format with proper indentation
-            const problemString = `,\n    {
+            // Convert to string format matching existing format
+            const problemString = `    {
         "title": "${newProblem.title}",
         "description": "${newProblem.description}",
         "typst": "${newProblem.typst}"
     }`;
             
-            // Add to existing problems
+            // Add to existing problems, ensuring proper comma placement
+            const problems = problemsMatch[1];
+            // Remove any trailing commas and whitespace
+            const trimmedProblems = problems.replace(/,\s*$/, '');
             const newContent = content.replace(
-              /(\s*)\];/,
-              `${problemString}\n];`
+              problems,
+              `${trimmedProblems},\n${problemString}`
             );
             
             // Write back to file
