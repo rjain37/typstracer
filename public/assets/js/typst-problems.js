@@ -95,4 +95,9 @@ const problems = [
         "description": "Thank the lord for Chernoff bounds",
         "typst": "P(X >= k) = sum_(i=k)^n binom(n,i) p^i (1-p)^(n-i)"
     }
-];
+,
+    {
+    "title": "Handshake Lemma",
+    "description": "I bet you're fun at parties",
+    "typst": "sum_(v in V) deg(v) = 2|E|"
+}];
