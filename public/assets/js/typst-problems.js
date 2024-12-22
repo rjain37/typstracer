@@ -103,6 +103,6 @@ const problems = [
     {
         "title": "Analytic Radius of Convergence",
         "description": "The radius for where a power series converges in normed vector spaces",
-        "typst": "R(f) = ( limsup_(n -> infinity) || T_n ||^(1 slash n)_(cal(L)^n))^(-1)"
+        "typst": "R(f) = ( limsup_(n -> infinity) ||T_n||^(1 slash n)_(cal(L)^n))^(-1)"
     }
 ];
