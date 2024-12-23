@@ -280,8 +280,19 @@
 
         // Preload the first problem
         async function preloadFirstProblem() {
-            const randomIndex = Math.floor(Math.random() * problems.length);
-            preloadedProblem = problems[randomIndex];
+            // Filter out used problems
+            const availableProblems = problems.filter(p => !usedProblemIndices.has(problems.indexOf(p)));
+            if (availableProblems.length === 0) {
+                // If all problems have been used, end the game
+                if (isTimedMode) {
+                    endGame();
+                }
+                return;
+            }
+
+            // Randomly select from available problems
+            const randomIndex = Math.floor(Math.random() * availableProblems.length);
+            preloadedProblem = availableProblems[randomIndex];
             
             // Create a hidden div for preloading
             preloadedTarget = document.createElement('div');
@@ -299,7 +310,7 @@
             isTimedMode = timed;
             score = 0;
             scoreElement.textContent = score;
-            usedProblemIndices.clear();
+            usedProblemIndices.clear(); // Clear used problems when starting a new game
 
             if (timed) {
                 timerContainer.style.display = 'block';
@@ -377,11 +388,13 @@
             // Filter out used problems
             const availableProblems = problems.filter(p => !usedProblemIndices.has(problems.indexOf(p)));
             if (availableProblems.length === 0) {
-                endGame();
+                if (isTimedMode) {
+                    endGame();
+                }
                 return;
             }
 
-            // Randomly select a problem
+            // Randomly select from available problems
             const randomIndex = Math.floor(Math.random() * availableProblems.length);
             currentProblem = availableProblems[randomIndex];
             usedProblemIndices.add(problems.indexOf(currentProblem));
