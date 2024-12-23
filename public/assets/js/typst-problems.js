@@ -110,4 +110,9 @@ const problems = [
     "title": "Convolution Integral",
     "description": "Definition of convolution for continuous functions.",
     "typst": "x(t) * h(t) = integral_(-oo)^oo x(tau) h(t-tau) dif tau"
+},
+    {
+    "title": "Class Equation",
+    "description": "As seen in group theory (corollary of orbit-stabilizer)",
+    "typst": "abs(G) = abs(Z(G)) + sum_(i=1)^n abs(G : C_G (g_i))"
 }];
