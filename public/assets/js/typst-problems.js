@@ -115,4 +115,9 @@ const problems = [
     "title": "Class Equation",
     "description": "As seen in group theory (corollary of orbit-stabilizer)",
     "typst": "abs(G) = abs(Z(G)) + sum_(i=1)^n abs(G : C_G (g_i))"
+},
+    {
+    "title": "Orbit-Stabilizer",
+    "description": "The orbit-stabilizer relation for a group acting on a set.",
+    "typst": "abs(Orb(x)) = [G : Stab(x)]"
 }];
