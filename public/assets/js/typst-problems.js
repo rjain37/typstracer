@@ -104,20 +104,20 @@ const problems = [
         "title": "Analytic Radius of Convergence",
         "description": "The radius for where a power series converges in normed vector spaces",
         "typst": "R(f) = ( limsup_(n -> infinity) norm(T_n)^(1 slash n)_(cal(L)^n))^(-1)"
+    },
+    {
+        "title": "Convolution Integral",
+        "description": "Definition of convolution for continuous functions.",
+        "typst": "x(t) * h(t) = integral_(-oo)^oo x(tau) h(t-tau) dif tau"
+    },
+    {
+        "title": "Class Equation",
+        "description": "As seen in group theory (corollary of orbit-stabilizer)",
+        "typst": "abs(G) = abs(Z(G)) + sum_(i=1)^n abs(G : C_G (g_i))"
+    },
+    {
+        "title": "Orbit-Stabilizer",
+        "description": "The orbit-stabilizer relation for a group acting on a set.",
+        "typst": "abs(Orb(x)) = [G : Stab(x)]"
     }
-,
-    {
-    "title": "Convolution Integral",
-    "description": "Definition of convolution for continuous functions.",
-    "typst": "x(t) * h(t) = integral_(-oo)^oo x(tau) h(t-tau) dif tau"
-},
-    {
-    "title": "Class Equation",
-    "description": "As seen in group theory (corollary of orbit-stabilizer)",
-    "typst": "abs(G) = abs(Z(G)) + sum_(i=1)^n abs(G : C_G (g_i))"
-},
-    {
-    "title": "Orbit-Stabilizer",
-    "description": "The orbit-stabilizer relation for a group acting on a set.",
-    "typst": "abs(Orb(x)) = [G : Stab(x)]"
-}];
+];
