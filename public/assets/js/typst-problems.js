@@ -120,4 +120,9 @@ const problems = [
         "description": "The orbit-stabilizer relation for a group acting on a set.",
         "typst": "abs(Orb(x)) = [G : Stab(x)]"
     }
-];
+,
+    {
+    "title": "Millin Series",
+    "description": "Sum of inverse fibonaccis at power 2 indices",
+    "typst": "sum_(n=0)^infinity 1/(F_(2^n)) = (7-sqrt(5))/2"
+}];
