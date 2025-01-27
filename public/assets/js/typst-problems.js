@@ -165,4 +165,9 @@ const problems = [
     "title": "Variation of Parameters",
     "description": "The general form for inhomogeneous second order differential equation solutions",
     "typst": "u_1 = -integral (y_2 f(x))/W(y_1, y_2) dif x"
+},
+    {
+    "title": "Ito's Formula",
+    "description": "The evolution in a random variable for a vector drift equation with stochastic noise",
+    "typst": "dif Y_t = ((diff f)/(diff t) + omega dot nabla f + 1/2 alpha^2 nabla^2 f) dif t + alpha nabla f dot dif W_t"
 }];
