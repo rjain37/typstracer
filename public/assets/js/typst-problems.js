@@ -170,4 +170,9 @@ const problems = [
     "title": "Ito's Formula",
     "description": "The evolution in a random variable for a vector drift equation with stochastic noise",
     "typst": "dif Y_t = ((diff f)/(diff t) + omega dot nabla f + 1/2 alpha^2 nabla^2 f) dif t + alpha nabla f dot dif W_t"
+},
+    {
+    "title": "Sommerfeld Expansion",
+    "description": "A common expansion for integrals involving the Fermi occupation function",
+    "typst": "integral_(-oo)^oo dif E H(E) n_F (E) = integral_(-oo)^mu dif E H(E) + pi^2/6 (k_B T)^2 H'(mu) + cal(O)((k_B T)^4)"
 }];
