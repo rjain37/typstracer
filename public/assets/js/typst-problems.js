@@ -175,4 +175,9 @@ const problems = [
     "title": "Sommerfeld Expansion",
     "description": "A common expansion for integrals involving the Fermi occupation function",
     "typst": "integral_(-oo)^oo dif E H(E) n_F (E) = integral_(-oo)^mu dif E H(E) + pi^2/6 (k_B T)^2 H'(mu) + cal(O)((k_B T)^4)"
+},
+    {
+    "title": "Koksma-Hlawka Inequality",
+    "description": "An upper bound on quasi-Monte Carlo estimator error",
+    "typst": "abs(integral_Omega f dif x - abs(Omega)/N sum_(k=1)^N f(p_k)) <= D(P_N) "TV"(f)"
 }];
