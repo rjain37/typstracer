@@ -125,4 +125,9 @@ const problems = [
     "title": "Millin Series",
     "description": "Sum of inverse fibonaccis at power 2 indices",
     "typst": "sum_(n=0)^infinity 1/(F_(2^n)) = (7-sqrt(5))/2"
+},
+    {
+    "title": "Isomorphism of C",
+    "description": "Isomorphism between complex numbers and real polynomials",
+    "typst": "CC approx (RR[x])/(x^2 + 1)"
 }];
