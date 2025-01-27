@@ -179,5 +179,5 @@ const problems = [
     {
     "title": "Koksma-Hlawka Inequality",
     "description": "An upper bound on quasi-Monte Carlo estimator error",
-    "typst": "abs(integral_Omega f dif x - abs(Omega)/N sum_(k=1)^N f(p_k)) <= D(P_N) "TV"(f)"
+    "typst": "abs(integral_Omega f dif x - abs(Omega)/N sum_(k=1)^N f(p_k)) <= D(P_N) \"TV\"(f)"
 }];
