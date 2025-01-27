@@ -145,4 +145,9 @@ const problems = [
         "description": "An upper bound for the mixing time of a Markov Chain",
         "typst": "t_\"mix\" (epsilon) <= N ceil(ln(epsilon)/ln(1 - delta))"
     }
-];
+,
+    {
+    "title": "Frobenius Norm",
+    "description": "One possible norm of a matrix",
+    "typst": "norm(A)_F = tr(A A^T) = sqrt(sigma_1^2 + ... + sigma_r^2)"
+}];
