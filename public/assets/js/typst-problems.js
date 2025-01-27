@@ -119,30 +119,30 @@ const problems = [
         "title": "Orbit-Stabilizer",
         "description": "The orbit-stabilizer relation for a group acting on a set.",
         "typst": "abs(Orb(x)) = [G : Stab(x)]"
+    },
+    {
+        "title": "Millin Series",
+        "description": "Sum of inverse fibonaccis at power 2 indices",
+        "typst": "sum_(n=0)^infinity 1/(F_(2^n)) = (7-sqrt(5))/2"
+    },
+    {
+        "title": "Isomorphism of C",
+        "description": "Isomorphism between complex numbers and real polynomials",
+        "typst": "CC approx (RR[x])/(x^2 + 1)"
+    },
+    {
+        "title": "Monte Carlo Integration",
+        "description": "The foundational equation of Monte Carlo Integration",
+        "typst": "integral_Omega f dif x = lim_(N -> oo) 1/N sum_(i=1)^N f(X_i)"
+    },
+    {
+        "title": "Noether Current",
+        "description": "The current representing changes in a field over time",
+        "typst": "j^(a mu) = ((diff cal(L))/(diff (diff_mu phi^i)) diff_nu phi^i - cal(L) delta_nu^mu) (diff x^nu)/(diff omega_a) |_(omega=0) - (diff cal(L))/(diff (diff_mu phi^i)) F_a^i (phi)"
+    },
+    {
+        "title": "Markov Chain Mixing Time",
+        "description": "An upper bound for the mixing time of a Markov Chain",
+        "typst": "t_\"mix\" (epsilon) <= N ceil(ln(epsilon)/ln(1 - delta))"
     }
-,
-    {
-    "title": "Millin Series",
-    "description": "Sum of inverse fibonaccis at power 2 indices",
-    "typst": "sum_(n=0)^infinity 1/(F_(2^n)) = (7-sqrt(5))/2"
-},
-    {
-    "title": "Isomorphism of C",
-    "description": "Isomorphism between complex numbers and real polynomials",
-    "typst": "CC approx (RR[x])/(x^2 + 1)"
-},
-    {
-    "title": "Monte Carlo Integration",
-    "description": "The foundational equation of Monte Carlo Integration",
-    "typst": "integral_Omega f dif x = lim_(N -> oo) 1/N sum_(i=1)^N f(X_i)"
-},
-    {
-    "title": "Noether Current",
-    "description": "The current representing changes in a field over time",
-    "typst": "j^(a mu) = ((diff cal(L))/(diff (diff_mu phi^i)) diff_nu phi^i - cal(L) delta_nu^mu) (diff x^nu)/(diff omega_a) |_(omega=0) - (diff cal(L))/(diff (diff_mu phi^i)) F_a^i (phi)"
-},
-    {
-    "title": "Markov Chain Mixing Time",
-    "description": "An upper bound for the mixing time of a Markov Chain",
-    "typst": "t_"mix" (epsilon) <= N ceil(ln(epsilon)/ln(1 - delta))"
-}];
+];
