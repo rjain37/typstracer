@@ -140,4 +140,9 @@ const problems = [
     "title": "Noether Current",
     "description": "The current representing changes in a field over time",
     "typst": "j^(a mu) = ((diff cal(L))/(diff (diff_mu phi^i)) diff_nu phi^i - cal(L) delta_nu^mu) (diff x^nu)/(diff omega_a) |_(omega=0) - (diff cal(L))/(diff (diff_mu phi^i)) F_a^i (phi)"
+},
+    {
+    "title": "Markov Chain Mixing Time",
+    "description": "An upper bound for the mixing time of a Markov Chain",
+    "typst": "t_"mix" (epsilon) <= N ceil(ln(epsilon)/ln(1 - delta))"
 }];
