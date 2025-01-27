@@ -159,25 +159,25 @@ const problems = [
         "title": "Reciprocal Lattice Vectors",
         "description": "A formula for calculating the first reciprocal lattice vector from primitive lattice vectors in 3D",
         "typst": "bold(b)_1 = 2pi (bold(a)_1 times bold(a)_2)/(bold(a)_1 dot (bold(a)_2 times bold(a)_3))"
+    },
+    {
+        "title": "Variation of Parameters",
+        "description": "The general form for inhomogeneous second order differential equation solutions",
+        "typst": "u_1 = -integral (y_2 f(x))/W(y_1, y_2) dif x"
+    },
+    {
+        "title": "Ito's Formula",
+        "description": "The evolution in a random variable for a vector drift equation with stochastic noise",
+        "typst": "dif Y_t = ((diff f)/(diff t) + omega dot nabla f + 1/2 alpha^2 nabla^2 f) dif t + alpha nabla f dot dif W_t"
+    },
+    {
+        "title": "Sommerfeld Expansion",
+        "description": "A common expansion for integrals involving the Fermi occupation function",
+        "typst": "integral_(-oo)^oo dif E H(E) n_F (E) = integral_(-oo)^mu dif E H(E) + pi^2/6 (k_B T)^2 H'(mu) + cal(O)((k_B T)^4)"
+    },
+    {
+        "title": "Koksma-Hlawka Inequality",
+        "description": "An upper bound on quasi-Monte Carlo estimator error",
+        "typst": "abs(integral_Omega f dif x - abs(Omega)/N sum_(k=1)^N f(p_k)) <= D(P_N) \"TV\"(f)"
     }
-,
-    {
-    "title": "Variation of Parameters",
-    "description": "The general form for inhomogeneous second order differential equation solutions",
-    "typst": "u_1 = -integral (y_2 f(x))/W(y_1, y_2) dif x"
-},
-    {
-    "title": "Ito's Formula",
-    "description": "The evolution in a random variable for a vector drift equation with stochastic noise",
-    "typst": "dif Y_t = ((diff f)/(diff t) + omega dot nabla f + 1/2 alpha^2 nabla^2 f) dif t + alpha nabla f dot dif W_t"
-},
-    {
-    "title": "Sommerfeld Expansion",
-    "description": "A common expansion for integrals involving the Fermi occupation function",
-    "typst": "integral_(-oo)^oo dif E H(E) n_F (E) = integral_(-oo)^mu dif E H(E) + pi^2/6 (k_B T)^2 H'(mu) + cal(O)((k_B T)^4)"
-},
-    {
-    "title": "Koksma-Hlawka Inequality",
-    "description": "An upper bound on quasi-Monte Carlo estimator error",
-    "typst": "abs(integral_Omega f dif x - abs(Omega)/N sum_(k=1)^N f(p_k)) <= D(P_N) \"TV\"(f)"
-}];
+];
