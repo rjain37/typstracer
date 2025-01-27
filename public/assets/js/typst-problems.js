@@ -135,4 +135,9 @@ const problems = [
     "title": "Monte Carlo Integration",
     "description": "The foundational equation of Monte Carlo Integration",
     "typst": "integral_Omega f dif x = lim_(N -> oo) 1/N sum_(i=1)^N f(X_i)"
+},
+    {
+    "title": "Noether Current",
+    "description": "The current representing changes in a field over time",
+    "typst": "j^(a mu) = ((diff cal(L))/(diff (diff_mu phi^i)) diff_nu phi^i - cal(L) delta_nu^mu) (diff x^nu)/(diff omega_a) |_(omega=0) - (diff cal(L))/(diff (diff_mu phi^i)) F_a^i (phi)"
 }];
