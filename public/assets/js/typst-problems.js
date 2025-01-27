@@ -160,4 +160,9 @@ const problems = [
         "description": "A formula for calculating the first reciprocal lattice vector from primitive lattice vectors in 3D",
         "typst": "bold(b)_1 = 2pi (bold(a)_1 times bold(a)_2)/(bold(a)_1 dot (bold(a)_2 times bold(a)_3))"
     }
-];
+,
+    {
+    "title": "Variation of Parameters",
+    "description": "The general form for inhomogeneous second order differential equation solutions",
+    "typst": "u_1 = -integral (y_2 f(x))/W(y_1, y_2) dif x"
+}];
