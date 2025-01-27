@@ -130,4 +130,9 @@ const problems = [
     "title": "Isomorphism of C",
     "description": "Isomorphism between complex numbers and real polynomials",
     "typst": "CC approx (RR[x])/(x^2 + 1)"
+},
+    {
+    "title": "Monte Carlo Integration",
+    "description": "The foundational equation of Monte Carlo Integration",
+    "typst": "integral_Omega f dif x = lim_(N -> oo) 1/N sum_(i=1)^N f(X_i)"
 }];
