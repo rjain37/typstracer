@@ -150,4 +150,9 @@ const problems = [
     "title": "Frobenius Norm",
     "description": "One possible norm of a matrix",
     "typst": "norm(A)_F = tr(A A^T) = sqrt(sigma_1^2 + ... + sigma_r^2)"
+},
+    {
+    "title": "Atomic Form Factor",
+    "description": "The scattering strength contribution of a specific point in a lattice",
+    "typst": "f(bold(K)) = -integral dif bold(r) e^(i bold(K) dot bold(r)) rho(bold(r))"
 }];
