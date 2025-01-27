@@ -155,4 +155,9 @@ const problems = [
     "title": "Atomic Form Factor",
     "description": "The scattering strength contribution of a specific point in a lattice",
     "typst": "f(bold(K)) = -integral dif bold(r) e^(i bold(K) dot bold(r)) rho(bold(r))"
+},
+    {
+    "title": "Reciprocal Lattice Vectors",
+    "description": "A formula for calculating the first reciprocal lattice vector from primitive lattice vectors in 3D",
+    "typst": "bold(b)_1 = 2pi (bold(a)_1 times bold(a)_2)/(bold(a)_1 dot (bold(a)_2 times bold(a)_3))"
 }];
