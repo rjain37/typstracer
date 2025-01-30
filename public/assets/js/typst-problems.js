@@ -148,7 +148,7 @@ const problems = [
     {
         "title": "Frobenius Norm",
         "description": "One possible norm of a matrix",
-        "typst": "norm(A)_F = tr(A A^T) = sqrt(sigma_1^2 + ... + sigma_r^2)"
+        "typst": "norm(A)_F = tr(A A^T) = sqrt(sigma_1^2 + dots.c + sigma_r^2)"
     },
     {
         "title": "Atomic Form Factor",
